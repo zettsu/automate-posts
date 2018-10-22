@@ -1,0 +1,10 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "se/selenium-server-standalone": "^3.12",
+        "facebook/webdriver": "^1.6"
+    },
+    "autoload": {
+        "psr-0": {"App": "src/"}
+    }
+}
