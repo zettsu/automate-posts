@@ -10,7 +10,7 @@ require __DIR__ . '/vendor/autoload.php';
 define('BASE_URL', 'https://bitcointalk.org/');
 define('CCODE', '01624f2a12deacf34ed8');
 define('LOGIN_PAGE', "index.php?action=login;ccode=" . CCODE);
-define('EXEC_PATH', 'community/index.php?board=7.0');
+define('EXEC_PATH', 'index.php?action=post;board=33.0');
 //https://bitcointalk.org/index.php?board=1.0
 
 //data example
@@ -49,34 +49,24 @@ use App\RequestsService;
             $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
             $page = $driver->get(BASE_URL . LOGIN_PAGE);
 
-            if(count($page->findElements(WebDriverBy::id('hellomember'))) > 0)
+            if(count($page->findElements(WebDriverBy::id('hellomember'))) < 1)
             {
-                echo 'logged';
-            }else{
-                $name_input = $page->findElement(WebDriverBy::name('user'));
-                $name_input->sendKeys("jmatias.olivera@gmail.com");
-                $pass_input = $page->findElement(WebDriverBy::name('passwrd'));
-                $pass_input->sendKeys("Sakura23!");
-                $stay_logged_minutes_input = $page->findElement(WebDriverBy::name('cookielength'));
-                $stay_logged_minutes_input->sendKeys(6099);
-                $stay_logged_checkbox = $page->findElement(WebDriverBy::name('cookieneverexp'));
-                $stay_logged_checkbox->click();
+                $login = $service->makeLogin($page, $driver);
 
-                //$driver->getKeyboard()->pressKey('ENTER');
-                $page->findElement(WebDriverBy::cssSelector("input[value='Login']"))->click();
-                $driver->wait(5);
-
-                //echo(count($page->findElements(WebDriverBy::id('hellomember'))) > 0);
+                if(!$login)
+                {
+                    http_response_code(500);
+                    echo json_encode(array('error' => 'Error making login, please check provided credentials.'));
+                }
             }
-            //$page2 = $driver->getPageSource();
-            //print_r($page2);
-        //echo(count($driver->findElement(WebDriverBy::id('hellomember'))) > 0);
+
+            $service->createPost($driver);
+
             //$captcha_token = $page->findElement(WebDriverBy::id('recaptcha-token'));
-            //print_r($captcha_token);
-            //$page->close();
-            //die();
+            $page->close();
         }else{
-            echo json_encode(array('error'=>'params missing'));
+            http_response_code(500);
+            echo json_encode(array('error'=>'Params missing'));
         }
 
     }
