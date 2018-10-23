@@ -19,7 +19,7 @@ use Facebook\WebDriver\Remote\DesiredCapabilities;
 class RequestsService
 {
 
-    private $request;
+    public $request;
 
     public function __construct()
     {
@@ -55,16 +55,6 @@ class RequestsService
         }
 
         return false;
-    }
-
-    public function processPost()
-    {
-
-    }
-
-    public function processGet()
-    {
-
     }
 
     public function getRequestData()

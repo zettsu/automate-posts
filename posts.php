@@ -9,7 +9,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 define('BASE_URL', 'https://bitcointalk.org/');
 define('CCODE', '01624f2a12deacf34ed8');
-define('LOGIN_PAGE', "index.php?action=login;ccode=" . CCODE);
+define('LOGIN_PAGE', "index.php?action=login;ccode=");
 define('EXEC_PATH', 'index.php?action=post;board=33.0');
 //https://bitcointalk.org/index.php?board=1.0
 
@@ -41,13 +41,13 @@ use App\RequestsService;
 
     if($service->isPost())
     {
-        $service->getRequestData();
+        $params = $service->getRequestData();
 
         if($service->isValid())
         {
             $host = 'http://localhost:4444/wd/hub'; // this is the default
             $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
-            $page = $driver->get(BASE_URL . LOGIN_PAGE);
+            $page = $driver->get(BASE_URL . LOGIN_PAGE . $params->ccode);
 
             if(count($page->findElements(WebDriverBy::id('hellomember'))) < 1)
             {
@@ -61,8 +61,6 @@ use App\RequestsService;
             }
 
             $service->createPost($driver);
-
-            //$captcha_token = $page->findElement(WebDriverBy::id('recaptcha-token'));
             $page->close();
         }else{
             http_response_code(500);
