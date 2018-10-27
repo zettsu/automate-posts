@@ -20,7 +20,7 @@ DAEMON_OPTS=" -jar $JAR_FILE -log $LOG_FILE"
 
 NAME=selenium
 
-export DISPLAY=:90
+export DISPLAY=:99
 
 case "$1" in
     start)

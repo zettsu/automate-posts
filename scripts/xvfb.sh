@@ -2,7 +2,7 @@
 
 XVFB=/usr/bin/Xvfb
 XVFBARGS="$DISPLAY -ac -screen 0 1024x768x16"
-PIDFILE=${HOME}/xvfb_${DISPLAY:1}.pid
+PIDFILE=${HOME}/xvfb_${DISPLAY:99}.pid
 case "$1" in
   start)
     echo -n "Starting virtual X frame buffer: Xvfb"
