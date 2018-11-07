@@ -16,7 +16,7 @@ JAR_FILE="/etc/selenium/selenium-server-standalone.jar"
 LOG_FILE="/etc/selenium/log/selenium.log"
 CHROME_DRIVER="/etc/selenium/chromedriver"
 
-DAEMON_OPTS=" -jar $JAR_FILE -log $LOG_FILE"
+DAEMON_OPTS=" -jar -Dwebdriver.chrome.driver=$CHROME_DRIVER $JAR_FILE"
 
 NAME=selenium
 

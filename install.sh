@@ -13,16 +13,23 @@ SERVICES_DIR="/etc/init.d/"
 SCRIPTS_DIR="/scripts/"
 SELENIUM_SCRIPT="selenium"
 XVFB_SCRIPT="xvfb.sh"
+CHROME_DRIVER="chromedriver"
 
 if [ ! -d "$DIRECTORY" ]; then
   mkdir $DIRECTORY;
 fi
 
 COPY="$CURRENT_PATH$SELENIUM_JAR  $DIRECTORY"
+echo 'copying selenium JAR';
 cp -Rf $COPY;
 
-cp $CURRENT_PATH$BIN_PATH $USR_BIN;
+echo 'copying binaries chromedriver';
+
+cp $CURRENT_PATH$BIN_PATH$CHROME_DRIVER $USR_BIN;
+
+echo 'copying selenium shell scripts';
 cp $CURRENT_PATH$SCRIPTS_DIR$SELENIUM_SCRIPT $SERVICES_DIR;
+echo 'copying xvfb shell script';
 cp $CURRENT_PATH$SCRIPTS_DIR$XVFB_SCRIPT $SERVICES_DIR;
 
 

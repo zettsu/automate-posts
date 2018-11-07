@@ -37,12 +37,22 @@ if($service->isPost())
             }
         }
 
-        $service->createPost($driver);
+        if($service->isValidUpdate())
+        {
+            $service->updatePost($driver);
+
+            http_response_code(200);
+            echo json_encode(array('success'=>'updated'));
+        }else{
+            $service->createPost($driver);
+
+            http_response_code(200);
+            echo json_encode(array('message'=>'created', 'topic' => $service->response->topic));
+        }
+
         $page->close();
-        http_response_code(200);
-        echo json_encode(array('success'=>'created'));
     }else{
-        http_response_code(500);
+        http_response_code(400);
         echo json_encode(array('error'=>'Params missing'));
     }
 

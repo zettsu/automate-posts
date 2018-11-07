@@ -20,6 +20,7 @@ class RequestsService
 {
 
     public $request;
+    public $response;
 
     public function __construct()
     {
@@ -38,7 +39,6 @@ class RequestsService
 
         if(!empty($body))
         {
-
             $this->request = json_decode($body);
             return true;
         }
@@ -77,6 +77,21 @@ class RequestsService
         return true;
     }
 
+    public function isValidUpdate()
+    {
+        $keys = ['topic'];
+
+        foreach ($keys as $key)
+        {
+            if(!empty($this->request->{$key}) || isset($this->request->{$key}))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function createPost($driver)
     {
 
@@ -90,6 +105,20 @@ class RequestsService
         $message_input->sendKeys($this->request->post);
 
         $page->findElement(WebDriverBy::name('post'))->click();
+        $driver->wait(5);
+
+        $query_str = $page->getCurrentURL();
+
+        parse_str(parse_url($query_str, PHP_URL_QUERY), $output);
+        $this->response->topic = $output['topic'];
+
+
+        if(empty($this->response->topic))
+        {
+            http_response_code(400);
+            echo json_encode(array('error'=>'error creating new post'));
+        }
+
     }
 
     public function makeLogin($page, $driver)
@@ -109,6 +138,27 @@ class RequestsService
         $result = count($page->findElements(WebDriverBy::id('hellomember'))) > 0;
 
         return $result;
+    }
+
+
+    public function updatePost($driver)
+    {
+        $page = $driver->get(BASE_URL . $this->request->forum_url . "topic=".$this->request->topic);
+        $driver->wait(5);
+
+        $page->findElement(WebDriverBy::xpath('//*[@id="ignmsgbttns1"]/a[2]/img'))->click();
+
+        $driver->wait(5);
+
+        $subject_input = $page->findElement(WebDriverBy::name('subject'));
+        $subject_input->clear();
+        $subject_input->sendKeys($this->request->subject);
+
+        $message_input = $page->findElement(WebDriverBy::name('message'));
+        $message_input->clear();
+        $message_input->sendKeys($this->request->post);
+
+        $page->findElement(WebDriverBy::name('post'))->click();
     }
 
 }
