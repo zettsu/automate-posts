@@ -1,4 +1,4 @@
-# automate-posts
+# automate-posts on crypto currency site
 Selenium Posts automotion
 
 ####Example json Create post
