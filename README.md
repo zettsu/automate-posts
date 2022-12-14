@@ -51,4 +51,4 @@ Example return SUCCESS, HTTP CODE 200, OK
 
 Example return ERROR HTTP CODE 400, ERROR
 
-Warning: Topic number its returned on created on json response
+Note: Topic number its returned on created on json response
